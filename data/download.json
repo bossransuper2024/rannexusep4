@@ -1,0 +1,30 @@
+{
+  "generated": "2026-10-12T16:29:06.854Z",
+  "items": [
+    {
+      "label": "Gdrive",
+      "url": "https://drive.google.com/",
+      "note": "Googledrive"
+    },
+    {
+      "label": "Gdrive-mirror1",
+      "url": "https://drive.google.com/",
+      "note": "Googledrive"
+    },
+    {
+      "label": "mediafire-11",
+      "url": "https://drive.google.com/",
+      "note": "Mediafire"
+    },
+    {
+      "label": "mediafire-44",
+      "url": "https://www.mediafire.com/file/",
+      "note": "Mediafire"
+    },
+    {
+      "label": "Patch-23",
+      "url": "https://www.mediafire.com/file/",
+      "note": "Googledrive"
+    }
+  ]
+}

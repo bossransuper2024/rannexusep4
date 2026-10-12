@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Content Editor - RAN EP9 (internal)</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/news.css">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/news-data.js"></script>
+  <style>
+    :root { --editor-bg: #070B14; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--editor-bg); color: var(--text); font-family: var(--font-body); line-height: 1.5; min-height: 100vh; padding: 22px clamp(14px, 4vw, 40px) 80px; }
+    .ed-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 22px; }
+    .ed-head h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 4vw, 34px); margin: 0; text-transform: uppercase; letter-spacing: .5px; color: var(--accent); }
+    .ed-head .hint { color: var(--text-faint); font-size: 12px; font-family: var(--font-mono); letter-spacing: 1px; }
+    .ed-grid { display: grid; grid-template-columns: 320px 1fr; gap: 22px; align-items: start; }
+    @media (max-width: 900px) { .ed-grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel-solid); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 18px; }
+    .panel h2 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin: 0 0 14px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; letter-spacing: .5px; }
+    .field input, .field select, .field textarea { width: 100%; background: rgba(7,11,20,.7); border: 1px solid var(--line-strong); border-radius: 10px; color: var(--text); padding: 10px 12px; font-family: inherit; font-size: 14px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tbtn { font-family: var(--font-mono); font-size: 12px; letter-spacing: .5px; text-transform: uppercase; padding: 8px 10px; border: 1px solid var(--line-strong); background: rgba(8,12,24,.6); color: var(--text); border-radius: 9px; cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
+    .tbtn:hover { border-color: var(--accent); color: var(--accent); }
+    .tbtn:disabled { opacity: .35; cursor: not-allowed; }
+    .tbtn.strong { font-weight: 700; }
+    .tbtn.em { font-style: italic; }
+    .tbtn.under { text-decoration: underline; }
+    .tbtn.strike { text-decoration: line-through; }
+    .tbtn .ic { font-size: 14px; }
+    .tsep { width: 1px; align-self: stretch; background: var(--line-strong); margin: 2px 4px; }
+    .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 9px; overflow: hidden; }
+    .seg button { border: none; background: transparent; color: var(--text-dim); padding: 9px 16px; cursor: pointer; font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .seg button.active { background: var(--accent); color: #0A1020; font-weight: 700; }
+    #editor {
+      width: 100%; min-height: 480px; resize: vertical;
+      background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: 10px;
+      color: var(--text); padding: 22px 26px; font-family: var(--font-body); font-size: 16px; line-height: 1.8;
+      overflow: auto;
+    }
+    #editor:disabled { opacity: .5; }
+    #editor:focus { outline: none; border-color: var(--accent); }
+    #editor[data-empty="true"]::before { content: attr(data-placeholder); color: var(--text-faint); }
+    #editor .txt-callout { background: linear-gradient(135deg, rgba(var(--accent-rgb),0.12), rgba(var(--accent-rgb),0.04)); border: 1px solid rgba(var(--accent-rgb),0.3); border-radius: 12px; padding: 16px 20px; margin: 16px 0; position: relative; }
+    #editor .txt-callout::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); border-radius: 12px 0 0 12px; }
+    #editor blockquote.txt-quote { margin: 16px 0; padding: 12px 18px; border-left: 3px solid var(--accent); background: rgba(var(--accent-rgb),.06); border-radius: 0 10px 10px 0; color: rgba(255,255,255,.9); }
+    #editor code.txt-code { font-family: var(--font-mono); background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: 6px; font-size: 14px; color: #ffd479; }
+    #editor .txt-col { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0; }
+    #editor .txt-col > * { flex: 1 1 45%; min-width: 220px; }
+    #editor .txt-col3 { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0; }
+    #editor .txt-col3 > * { flex: 1 1 30%; min-width: 200px; }
+    #editor .txt-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    #editor .txt-table th, #editor .txt-table td { border: 1px solid var(--line-strong); padding: 8px 12px; text-align: left; }
+    #editor .txt-table th { background: rgba(var(--accent-rgb),.12); color: var(--accent); }
+    #editor hr.txt-hr { border: none; border-top: 1px solid var(--line-strong); margin: 20px 0; }
+    #editor h2.txt-h2, #editor h3.txt-h3 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .5px; margin: 22px 0 12px; }
+    #editor h2.txt-h2 { font-size: 26px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+    #editor h3.txt-h3 { font-size: 20px; color: var(--accent); }
+    #editor .txt-table.resizable { table-layout: fixed; }
+    #editor .txt-table.resizable th, #editor .txt-table.resizable td { position: relative; overflow: hidden; }
+    #editor .col-grip { position: absolute; top: 0; right: -3px; width: 8px; height: 100%; cursor: col-resize; background: transparent; z-index: 5; }
+    #editor .col-grip:hover { background: rgba(var(--accent-rgb), .35); }
+    #editor .tbtn.danger { background: rgba(255, 80, 80, .14); border-color: rgba(255, 80, 80, .5); color: #ff9a9a; }
+    #editor .tbtn.danger:hover:not(:disabled) { background: rgba(255, 80, 80, .28); }
+    #editor .txt-list { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+    #editor .txt-bullet { position: relative; padding-left: 24px; }
+    #editor .txt-bullet::before { content: "L"; position: absolute; left: 4px; color: var(--accent); }
+    #editor p { margin: 0 0 16px; }
+    #editor img.txt-img { max-width: 100%; border-radius: 10px; margin: 12px 0; display: block; }
+    #editor strong { color: #fff; font-weight: 700; }
+    @media (min-width: 1000px) {
+      body:has(#modeSeg button[data-mode="live"].active) .ed-grid > div:last-child { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+      body:has(#modeSeg button[data-mode="live"].active) .live-preview { position: sticky; top: 22px; max-height: calc(100vh - 44px); overflow: auto; }
+    }
+    .live-preview { display: none; }
+    body:has(#modeSeg button[data-mode="live"].active) .live-preview,
+    body:has(#modeSeg button[data-mode="preview"].active) .live-preview { display: block; }
+    body:has(#modeSeg button[data-mode="preview"].active) #editor { display: none; }
+    body:has(#modeSeg button[data-mode="preview"].active) .live-preview { grid-column: 1 / -1; }
+    .live-preview .panel { background: var(--panel-solid); }
+    .reader-body { font-size: 16px; line-height: 1.8; color: rgba(255,255,255,.86); }
+    .reader-body .txt-para { margin: 0 0 16px; }
+    .reader-body .txt-list { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+    .reader-body .txt-bullet { position: relative; padding-left: 24px; }
+    .reader-body .txt-bullet::before { content: "L"; position: absolute; left: 4px; color: var(--accent); }
+
+    #postList { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow: auto; }
+    #postList li { padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s; }
+    #postList li:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),.05); }
+    #postList li.active { border-color: var(--accent); background: rgba(var(--accent-rgb),.1); }
+    #postList .pl-title { font-weight: 600; display: block; }
+    #postList .pl-meta { font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); letter-spacing: 1px; text-transform: uppercase; }
+    #postList .pl-kind { color: var(--accent); }
+    .status { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(7,11,20,.96); border-top: 1px solid var(--line-strong); padding: 11px clamp(14px,4vw,40px); font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .5px; color: var(--text-dim); display: flex; align-items: center; gap: 12px; z-index: 50; }
+    .status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-faint); box-shadow: 0 0 8px rgba(255,255,255,.3); }
+    .status.ok .dot { background: var(--good); box-shadow: 0 0 8px rgba(var(--good-rgb),.7); }
+    .status.warn .dot { background: var(--danger); box-shadow: 0 0 8px rgba(var(--danger-rgb),.7); }
+    .status .spacer { margin-left: auto; }
+    .note { font-size: 12px; color: var(--text-faint); margin-top: 10px; line-height: 1.5; }
+    .muted { color: var(--text-faint); font-size: 12px; }
+    .pill { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line-strong); color: var(--text-dim); }
+  </style>
+</head>
+<body>
+  <div class="ed-head">
+    <h1>Content Editor</h1>
+    <span class="hint">INTERNAL - direct URL only - no server write (static host to export and download)</span>
+  </div>
+
+  <div class="ed-grid">
+    <div>
+      <div class="panel" style="margin-bottom:18px;">
+        <h2>Posts <span class="pill" id="srcPill">SITE_CONFIG</span></h2>
+        <div class="toolbar">
+          <button class="tbtn" id="btnLoadLive" type="button">Live Sheet</button>
+          <button class="tbtn" id="btnNew" type="button">New Post</button>
+        </div>
+        <input id="search" type="text" placeholder="Filter by title..." style="margin-bottom:10px;">
+        <ul id="postList"></ul>
+        <p class="muted" id="listCount"></p>
+      </div>
+
+      <div class="panel">
+        <h2>Metadata</h2>
+        <div class="field"><label>Type</label><select id="fType" disabled><option value="announcement">Announcement</option><option value="event">Event</option><option value="guide">Guide</option><option value="news">News</option></select></div>
+        <div class="field"><label>Date</label><input id="fDate" type="text" placeholder="e.g. 08-25-26" disabled></div>
+        <div class="field"><label>Title</label><input id="fTitle" type="text" placeholder="Post title" disabled></div>
+        <div class="field"><label>Image URL (hero, optional)</label><input id="fImage" type="text" placeholder="assets/... or https://..." disabled></div>
+        <div class="field"><label>Link (optional)</label><input id="fLink" type="text" placeholder="#" disabled></div>
+        <div class="field"><label>Description (short excerpt)</label><textarea id="fDesc" rows="2" placeholder="Short summary shown in the list" disabled></textarea></div>
+        <div class="field">
+          <label>Content File (.txt name, optional)</label>
+          <input id="fFile" type="text" placeholder="e.g. news-open-beta" disabled>
+          <p class="note">When loading from the Live Sheet, the article body comes from the Sheet content column directly. This filename is only used for local export/download.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px;">
+          <div class="seg" id="modeSeg">
+            <button type="button" data-mode="edit" class="active">Edit</button>
+            <button type="button" data-mode="live">Live</button>
+            <button type="button" data-mode="preview">Preview</button>
+          </div>
+          <span class="muted" id="rtHint">Highlight text, then click a button - formatting applies instantly (true WYSIWYG).</span>
+        </div>
+
+        <div class="toolbar" id="rtToolbar">
+          <button class="tbtn strong" data-rt="b" type="button" title="Bold">B</button>
+          <button class="tbtn em" data-rt="i" type="button" title="Italic">I</button>
+          <button class="tbtn under" data-rt="u" type="button" title="Underline">U</button>
+          <button class="tbtn strike" data-rt="s" type="button" title="Strikethrough">S</button>
+          <button class="tbtn" data-rt="code" type="button" title="Inline code">&lt;/&gt;</button>
+          <span class="tsep"></span>
+          <button class="tbtn" data-rt="h2" type="button" title="Heading 2">H2</button>
+          <button class="tbtn" data-rt="h3" type="button" title="Heading 3">H3</button>
+          <button class="tbtn" data-rt="para" type="button" title="Paragraph">Para</button>
+          <button class="tbtn" data-rt="bullet" type="button" title="Bullet list">Bullet</button>
+          <span class="tsep"></span>
+          <button class="tbtn" data-rt="callout" type="button" title="Callout box">Callout</button>
+          <button class="tbtn" data-rt="quote" type="button" title="Quote">Quote</button>
+          <button class="tbtn" data-rt="table" type="button" title="Table">Table</button>
+          <button class="tbtn" id="btnAddRow" type="button" title="Add row below caret">+ Row</button>
+          <button class="tbtn" id="btnAddCol" type="button" title="Add column right of caret">+ Col</button>
+          <button class="tbtn" data-rt="col" type="button" title="2 Columns">2Col</button>
+          <button class="tbtn" data-rt="col3" type="button" title="3 Columns">3Col</button>
+          <span class="tsep"></span>
+          <button class="tbtn" data-rt="img" type="button" title="Image">Image</button>
+          <button class="tbtn" data-rt="hr" type="button" title="Horizontal rule">HR</button>
+          <button class="tbtn" data-rt="br" type="button" title="Line break">BR</button>
+        </div>
+
+        <div id="editor" contenteditable="true" data-placeholder="Select a post and press Live Sheet / Open, or start a New Post..." disabled></div>
+
+        <div class="live-preview">
+          <div class="panel">
+            <h2>Live Reader Preview</h2>
+            <div class="reader-body" id="preview"></div>
+          </div>
+        </div>
+
+        <div class="toolbar" style="margin-top:16px;">
+          <button class="tbtn" id="btnCopyContent" type="button" disabled>Copy Content (Sheet)</button>
+          <button class="tbtn" id="btnUpdate" type="button" disabled>Download .txt</button>
+          <button class="tbtn" id="btnExport" type="button" disabled>Export metadata</button>
+          <button class="tbtn danger" id="btnDelete" type="button" disabled>Delete</button>
+          <button class="tbtn" id="btnClear" type="button">Clear</button>
+        </div>
+        <p class="note">
+          Live mode edits the article directly - what you type is what readers see. Highlight text and click a
+          toolbar button to apply bold, italic, callout, quote, table, columns, hr, H2/H3, etc.
+          instantly. No raw ** or [token] markup is shown while editing.
+          Use Copy Content to get the token-syntax text to paste into the Google Sheet content column.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="status" id="status">
+    <span class="dot"></span>
+    <span id="statusText">Ready. Press Live Sheet to load posts from the shared Google Sheet, or New Post.</span>
+    <span class="spacer"></span>
+    <span class="muted" id="modeLabel">mode: idle</span>
+  </div>
+
+  <script>
+
+  (function () {
+    "use strict";
+    var C = window.SITE_CONFIG || {};
+    var cfg = C.newsConfig || {};
+    var ND = window.NewsData || null;
+
+    function esc(s) { return (s == null) ? "" : String(s); }
+    function el(id) { return document.getElementById(id); }
+
+    function inline(t) {
+    return t
+      .replace(/\[img\](.*?)\[img\](?:\[(auto|\d+x\d+)\])?/g, function (_m, url, size) {
+        url = String(url).replace(/"/g, '"');
+        if (url.indexOf('://') === -1 && url.indexOf('/') !== 0) url = 'assets/content/' + url;
+        var dim = '';
+        if (size && size !== 'auto') { var p = size.split('x'); dim = ' width="' + p[0] + '" height="' + p[1] + '"'; }
+        return '<img class="txt-img" src="' + url + '" alt=""' + dim + '>';
+      })
+      .replace(/\[table\]([\s\S]*?)\[\/table\]/g, function (_m, content) {
+        var rows = content.trim().split('\n');
+        var html = '<table class="txt-table">';
+        rows.forEach(function (row, i) {
+          var cells = row.split('|').map(function (c) { return c.trim(); });
+          var tag = i === 0 ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+          html += '</tr>';
+        });
+        html += '</table>';
+        return html;
+      })
+      .replace(/\[callout\]([\s\S]*?)\[\/callout\]/g, '<div class="txt-callout">$1</div>')
+      .replace(/\[quote\]([\s\S]*?)\[\/quote\]/g, '<blockquote class="txt-quote">$1</blockquote>')
+      .replace(/\[code\](.*?)\[\/code\]/g, '<code class="txt-code">$1</code>')
+      .replace(/\[col\]([\s\S]*?)\[\/col\]/g, '<div class="txt-col">$1</div>')
+      .replace(/\[col3\]([\s\S]*?)\[\/col3\]/g, '<div class="txt-col3">$1</div>')
+      .replace(/\[h2\]([\s\S]*?)\[\/h2\]/g, '<h2 class="txt-h2">$1</h2>')
+      .replace(/\[h3\]([\s\S]*?)\[\/h3\]/g, '<h3 class="txt-h3">$1</h3>')
+      .replace(/\[hr\]/g, '<hr class="txt-hr">')
+      .replace(/\[br\]/g, '<br>')
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/__(.+?)__/g, "<u>$1</u>")
+      .replace(/~~(.+?)~~/g, "<del>$1</del>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+
+    function renderRawToHtml(raw) {
+      if (!raw || !raw.trim()) return '<p class="article-empty">No content yet.</p>';
+      var html = "", listOpen = false, tableOpen = false, tableRows = [];
+      function closeList() { if (listOpen) { html += "</ul>"; listOpen = false; } }
+      function closeTable() {
+        if (!tableOpen) return;
+        html += '<table class="txt-table">';
+        tableRows.forEach(function (row, ri) {
+          var cells = row.split("|").map(function (c) { return c.trim(); });
+          var tag = ri === 0 ? "th" : "td";
+          html += "<tr>";
+          cells.forEach(function (cell) { html += "<" + tag + ">" + inline(cell) + "</" + tag + ">"; });
+          html += "</tr>";
+        });
+        html += "</table>";
+        tableOpen = false; tableRows = [];
+      }
+      raw.split(/\r?\n/).forEach(function (line) {
+        line = line.replace(/\r/g, "");
+        if (tableOpen) {
+          if (/^\s*\[\/table\]\s*$/.test(line)) { closeTable(); return; }
+          tableRows.push(line); return;
+        }
+        if (/^\s*\[table\]\s*$/.test(line)) { closeList(); tableOpen = true; return; }
+        if (!line.trim()) { closeList(); return; }
+        var img = line.match(/\[img\]([^\[]+)\[img\]/);
+        if (img) { closeList(); html += '<p><img class="txt-img" src="' + esc(img[1].trim()) + '" alt=""></p>'; return; }
+        var b = line.match(/^\s*[-*+]\s+(.*)$/);
+        if (b) { if (!listOpen) { html += '<ul class="txt-list">'; listOpen = true; } html += '<li class="txt-bullet">' + inline(b[1]) + "</li>"; return; }
+        var hb = line.match(/^\s*\[h([23])\]([\s\S]*?)\[\/h\1\]\s*$/);
+        if (hb) { closeList(); html += '<h' + hb[1] + ' class="txt-h' + hb[1] + '">' + inline(hb[2]) + '</h' + hb[1] + '>'; return; }
+        closeList();
+        html += '<p class="txt-para">' + inline(line) + "</p>";
+      });
+      closeList(); closeTable();
+      return html;
+    }
+
+    function previewHtml(item, rawText) {
+      var cat = (item && (item.cat || item.type)) || "NEWS";
+      cat = String(cat).toUpperCase();
+      var date = ((cfg && cfg.showDate === false) || !(item && item.date)) ? "" : esc(item && item.date);
+      var catHtml = ((cfg && cfg.showCategory === false)) ? "" : '<span class="reader-tag">' + cat + "</span>";
+      var dateHtml = date ? '<span class="reader-date">' + date + "</span>" : "";
+      var meta = '<div class="reader-meta">' + catHtml + dateHtml + "</div>";
+      var title = '<h1 class="reader-title">' + esc(item && item.title || "") + "</h1>";
+      var imgHtml = "";
+      if (item && item.image && (cfg && cfg.showImagesInArticle !== false)) {
+        var src = item.image;
+        if (src.indexOf("://") === -1 && src.indexOf("/") !== 0) src = "assets/content/" + src;
+        imgHtml = '<figure class="reader-figure"><img src="' + esc(src) + '" alt="' + esc(item && item.title || "") + '" loading="lazy"></figure>';
+      }
+      var body = rawText && rawText.trim() ? renderRawToHtml(rawText)
+        : (item && item.description ? renderRawToHtml(item.description) : '<p class="article-empty">No content yet.</p>');
+      return meta + title + imgHtml + body;
+    }
+
+    function nodeToTokens(node) {
+      if (node.nodeType === 3) return node.textContent;
+      if (node.nodeType !== 1) return "";
+      var tag = node.tagName.toLowerCase();
+      var inner = "";
+      for (var i = 0; i < node.childNodes.length; i++) inner += nodeToTokens(node.childNodes[i]);
+      switch (tag) {
+        case "strong": case "b": return "**" + inner + "**";
+        case "em": case "i": return "*" + inner + "*";
+        case "u": return "__" + inner + "__";
+        case "del": case "s": return "~~" + inner + "~~";
+        case "code": return "[code]" + inner + "[/code]";
+        case "br": return "[br]";
+        case "hr": return "[hr]";
+        case "h2": return "[h2]" + inner + "[/h2]\n";
+        case "h3": return "[h3]" + inner + "[/h3]\n";
+        case "blockquote":
+          if (node.classList && node.classList.contains("txt-quote")) return "[quote]" + inner + "[/quote]\n";
+          return inner + "\n";
+        case "div":
+          if (node.classList && node.classList.contains("txt-callout")) return "[callout]" + inner + "[/callout]\n";
+          if (node.classList && node.classList.contains("txt-col")) return "[col]" + inner + "[/col]\n";
+          if (node.classList && node.classList.contains("txt-col3")) return "[col3]" + inner + "[/col3]\n";
+          if (node.classList && node.classList.contains("txt-table")) return inner;
+          return inner + "\n";
+        case "table": return "[table]\n" + inner + "[/table]\n";
+        case "thead": case "tbody": case "tr": return inner;
+        case "th": case "td":
+          return inner + (node.parentNode && node.parentNode.tagName.toLowerCase() === "tr" ? "|" : "");
+        case "ul": case "ol": return inner;
+        case "li":
+          if (node.classList && node.classList.contains("txt-bullet")) return "- " + inner + "\n";
+          return "- " + inner + "\n";
+        case "p": return inner + "\n";
+        case "img": return "[img]" + (node.getAttribute("src") || "") + "[img][auto]";
+        default: return inner;
+      }
+    }
+
+    function editorToTokens() {
+      var ed = el("editor");
+      var out = "";
+      for (var i = 0; i < ed.childNodes.length; i++) out += nodeToTokens(ed.childNodes[i]);
+      return out.replace(/\n{3,}/g, "\n\n").trim();
+    }
+
+    function blockHtml(type, innerHtml) {
+      switch (type) {
+        case "callout": return '<div class="txt-callout">' + (innerHtml || "Callout text") + "</div>";
+        case "quote": return '<blockquote class="txt-quote">' + (innerHtml || "Quoted text") + "</blockquote>";
+        case "col": return '<div class="txt-col">' + (innerHtml || "<p>Column A</p><p>Column B</p>") + "</div>";
+        case "col3": return '<div class="txt-col3">' + (innerHtml || "<p>Col A</p><p>Col B</p><p>Col C</p>") + "</div>";
+        case "table": return '<table class="txt-table"><tr><th>Header 1</th><th>Header 2</th></tr><tr><td>Value 1</td><td>Value 2</td></tr></table>';
+        case "hr": return '<hr class="txt-hr">';
+        case "h2": return '<h2 class="txt-h2">' + (innerHtml || "Heading 2") + "</h2>";
+        case "h3": return '<h3 class="txt-h3">' + (innerHtml || "Heading 3") + "</h3>";
+        case "img": return '<img class="txt-img" src="' + (innerHtml || "https://via.placeholder.com/600x300") + '" alt="">';
+        case "br": return "<br>";
+        case "para": return "<p>" + (innerHtml || "Paragraph text") + "</p>";
+        case "bullet": return '<ul class="txt-list"><li class="txt-bullet">List item</li></ul>';
+        default: return "<p>" + (innerHtml || "") + "</p>";
+      }
+    }
+
+    var editor = el("editor"), preview = el("preview");
+    var fType = el("fType"), fDate = el("fDate"), fTitle = el("fTitle"),
+        fImage = el("fImage"), fLink = el("fLink"), fDesc = el("fDesc"), fFile = el("fFile");
+    var btns = {
+      loadLive: el("btnLoadLive"), neu: el("btnNew"), update: el("btnUpdate"),
+      copy: el("btnCopyContent"), exp: el("btnExport"), clear: el("btnClear"), del: el("btnDelete")
+    };
+    var statusEl = el("status"), statusText = el("statusText"), modeLabel = el("modeLabel");
+    var state = { mode: "idle", current: null, list: [], source: "config" };
+
+    function setStatus(msg, kind) { statusText.textContent = msg; statusEl.className = "status" + (kind ? " " + kind : ""); }
+    function setMode(m) {
+      state.mode = m;
+      modeLabel.textContent = "mode: " + m;
+      var editing = (m === "new" || m === "edit" || m === "live");
+      var isLive = (m === "live");
+      var isPreview = (m === "preview");
+      editor.disabled = !editing;
+      editor.setAttribute("contenteditable", editing ? "true" : "false");
+      editor.dataset.empty = (editing && !editor.textContent.trim()) ? "true" : "false";
+      if (isPreview || isLive) preview.innerHTML = previewHtml(collectMeta(), editorToTokens());
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (e) { e.disabled = !editing; });
+      [btns.update, btns.copy, btns.exp].forEach(function (b) { b.disabled = !editing; });
+      btns.loadLive.disabled = false; btns.neu.disabled = false; btns.clear.disabled = false;
+      el("rtToolbar").querySelectorAll("button").forEach(function (b) { b.disabled = !editing; });
+      el("btnAddRow").disabled = !editing;
+      el("btnAddCol").disabled = !editing;
+      btns.del.disabled = !(editing && state.current);
+    }
+
+    function liveUpdate() {
+      if (state.mode !== "live" && state.mode !== "preview") return;
+      preview.innerHTML = previewHtml(collectMeta(), editorToTokens());
+    }
+    editor.addEventListener("input", function () {
+      editor.dataset.empty = !editor.textContent.trim() ? "true" : "false";
+      liveUpdate();
+    });
+
+    function enableMeta(enabled, withFile) {
+      [fType, fDate, fTitle, fImage, fLink, fDesc].forEach(function (e) { e.disabled = !enabled; });
+      fFile.disabled = !withFile;
+    }
+
+    function collectMeta() {
+      return {
+        cat: fType.value, type: fType.value, date: fDate.value.trim(),
+        title: fTitle.value.trim(), image: fImage.value.trim(),
+        link: fLink.value.trim() || "#", description: fDesc.value.trim(), context: fFile.value.trim()
+      };
+    }
+
+    function buildListFromItems(items, label) {
+      var ul = el("postList"); ul.innerHTML = "";
+      var count = 0;
+      var filter = (el("search").value || "").toLowerCase();
+      items.forEach(function (it, i) {
+        var title = it.title || "(untitled)";
+        if (filter && title.toLowerCase().indexOf(filter) === -1) return;
+        count++;
+        var li = document.createElement("li");
+        li.dataset.index = i;
+        var cat = (it.cat || it.type || "NEWS").toUpperCase();
+        li.innerHTML = '<span class="pl-title">' + esc(title) + "</span>" +
+          '<span class="pl-meta"><span class="pl-kind">' + esc(cat) + "</span> · " + esc(it.date || "") + "</span>";
+        li.addEventListener("click", function () { openItem(it, li); });
+        ul.appendChild(li);
+      });
+      el("listCount").textContent = count + " post(s) · " + label;
+      el("srcPill").textContent = label;
+      return count;
+    }
+
+    function loadLive() {
+      setStatus("Loading posts from the shared Google Sheet…", null);
+      if (!ND || typeof ND.load !== "function") {
+        buildListFromItems((C.news && C.news.items) || [], "SITE_CONFIG");
+        setStatus("NewsData loader unavailable — fell back to SITE_CONFIG items.", "warn");
+        return;
+      }
+      ND.load().then(function (items) {
+        if (!items || !items.length) {
+          buildListFromItems((C.news && C.news.items) || [], "SITE_CONFIG");
+          setStatus("Live Sheet returned no rows — showing SITE_CONFIG items.", "warn");
+          return;
+        }
+        state.list = items; state.source = "Live Sheet";
+        buildListFromItems(items, "Live Sheet");
+        setStatus("Loaded " + items.length + " posts from the shared Google Sheet.", "ok");
+      }).catch(function (err) {
+        buildListFromItems((C.news && C.news.items) || [], "SITE_CONFIG");
+        setStatus("Live Sheet fetch failed (" + (err && err.message ? err.message : err) + ") — showing SITE_CONFIG items.", "warn");
+      });
+    }
+
+    function openItem(item, li) {
+      var it = item || (state.list && state.list[Number((li && li.dataset.index) || 0)]);
+      if (!it) { setStatus("Could not open that post.", "warn"); return; }
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      if (li) li.classList.add("active");
+      fType.value = (it.cat || "NEWS").toLowerCase();
+      fDate.value = it.date || "";
+      fTitle.value = it.title || "";
+      fImage.value = it.image || "";
+      fLink.value = it.link || "#";
+      fDesc.value = it.description || "";
+      fFile.value = it.id || it.context || it.slug || "";
+      editor.innerHTML = renderRawToHtml(it.text || it.content || "");
+      makeTablesResizable();
+      editor.dataset.empty = (!editor.textContent || !editor.textContent.trim()) ? "true" : "false";
+      state.current = it;
+      enableMeta(true, true);
+      setMode("edit");
+      setStatus("Opened \"" + (it.title || "(untitled)") + "\". Edit the body (WYSIWYG), then Copy Content or Export.", "ok");
+      editor.focus();
+    }
+
+    function newPost() {
+      state.current = null; state.list = state.list || [];
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (e) { e.value = ""; });
+      fType.value = "announcement";
+      editor.innerHTML = ""; editor.dataset.empty = "true";
+      enableMeta(true, true);
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      setStatus("New post. Set metadata, then write the body. Use Copy Content to paste into the Sheet.", null);
+      setMode("new");
+      editor.focus();
+    }
+    function clearAll() {
+      state.current = null; state.list = [];
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (e) { e.value = ""; });
+      editor.innerHTML = ""; editor.dataset.empty = "true";
+      enableMeta(false, false);
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      setStatus("Cleared. Load Live Sheet or New Post.", null);
+      setMode("idle");
+    }
+
+    function doDelete() {
+      if (!state.current) { setStatus("No post selected to delete.", "warn"); return; }
+      if (!window.confirm("Remove \"" + (state.current.title || "(untitled)") + "\" from this editor session? (Local only — does not touch the Sheet.)")) return;
+      var idx = (state.list || []).indexOf(state.current);
+      if (idx !== -1) state.list.splice(idx, 1);
+      state.current = null;
+      editor.innerHTML = ""; editor.dataset.empty = "true";
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (e) { e.value = ""; });
+      enableMeta(false, false);
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      buildListFromItems(state.list && state.list.length ? state.list : ((C.news && C.news.items) || []), state.source);
+      setStatus("Deleted from this session.", "ok");
+      setMode("idle");
+    }
+
+    function focusEditor() { if (document.activeElement !== editor) editor.focus(); }
+    function insertBlock(type) {
+      focusEditor();
+      var html = blockHtml(type);
+      if (document.queryCommandSupported && document.queryCommandSupported("insertHTML")) {
+        document.execCommand("insertHTML", false, html + "<p><br></p>");
+      } else {
+        editor.insertAdjacentHTML("beforeend", html);
+      }
+      makeTablesResizable();
+      liveUpdate();
+    }
+
+    // Wrap the current selection's text in inline <code> WITHOUT replacing it.
+    function applyInlineCode() {
+      var sel = window.getSelection();
+      if (!sel || !sel.rangeCount) { document.execCommand("insertHTML", false, '<code class="txt-code">code</code>'); return; }
+      var text = sel.toString();
+      var replacement = text
+        ? '<code class="txt-code">' + text + '</code>'
+        : '<code class="txt-code">code</code>';
+      // Prefer a non-destructive surround. execCommand still keeps the rest of the
+      // document intact; only the selected text becomes the <code> wrapper.
+      try { document.execCommand("insertHTML", false, replacement); }
+      catch (e) { document.execCommand("insertHTML", false, replacement); }
+    }
+
+    // Turn the paragraph/block containing the caret into an <h2>/<h3> WITHOUT
+    // losing or replacing the selected/inner text. Preexisting text is preserved.
+    function applyBlock(type) {
+      var sel = window.getSelection();
+      var node = sel && sel.anchorNode ? sel.anchorNode : null;
+      if (node && node.nodeType === 3) node = node.parentNode;
+      var block = node;
+      while (block && block !== editor && !/^(P|DIV|H1|H2|H3|H4|LI|BLOCKQUOTE)$/.test(block.tagName)) block = block.parentNode;
+      if (!block || block === editor) {
+        document.execCommand("insertHTML", false, blockHtml(type, "") + "<p><br></p>");
+        return;
+      }
+      var inner = block.textContent || (type === "h2" ? "Heading 2" : "Heading 3");
+      var tag = type === "h2" ? "h2" : "h3";
+      var h = document.createElement(tag);
+      h.className = "txt-" + tag;
+      h.textContent = inner;
+      block.parentNode.replaceChild(h, block);
+      // Place caret inside the new heading for continued editing.
+      var range = document.createRange();
+      range.selectNodeContents(h); range.collapse(false);
+      var ns = window.getSelection(); ns.removeAllRanges(); ns.addRange(range);
+    }
+
+    // ---- Table editing helpers (add row/col + resizable columns) ----
+    function activeTable() {
+      var sel = window.getSelection();
+      var node = sel && sel.anchorNode ? sel.anchorNode : null;
+      if (node && node.nodeType === 3) node = node.parentNode;
+      while (node && node !== editor && node.tagName !== "TABLE") node = node.parentNode;
+      return (node && node.tagName === "TABLE") ? node : null;
+    }
+    function addTableRow() {
+      var t = activeTable(); if (!t) { setStatus("Place the caret inside a table first.", "warn"); return; }
+      var ref = (function () {
+        var s = window.getSelection(); var n = s && s.anchorNode ? s.anchorNode : null;
+        if (n && n.nodeType === 3) n = n.parentNode;
+        while (n && n !== editor && n.tagName !== "TR") n = n.parentNode;
+        return n;
+      })();
+      var colCount = t.rows[0] ? t.rows[0].cells.length : 2;
+      var tr = document.createElement("tr");
+      for (var c = 0; c < colCount; c++) {
+        var td = document.createElement("td"); td.textContent = "Cell"; tr.appendChild(td);
+      }
+      if (ref) ref.parentNode.insertBefore(tr, ref.nextSibling); else t.appendChild(tr);
+      makeTablesResizable(); liveUpdate();
+    }
+    function addTableCol() {
+      var t = activeTable(); if (!t) { setStatus("Place the caret inside a table first.", "warn"); return; }
+      var ref = (function () {
+        var s = window.getSelection(); var n = s && s.anchorNode ? s.anchorNode : null;
+        if (n && n.nodeType === 3) n = n.parentNode;
+        while (n && n !== editor && n.tagName !== "TD" && n.tagName !== "TH") n = n.parentNode;
+        return n;
+      })();
+      for (var r = 0; r < t.rows.length; r++) {
+        var row = t.rows[r];
+        var cell = document.createElement(r === 0 ? "th" : "td");
+        cell.textContent = "Header";
+        if (ref && ref.parentNode === row) row.insertBefore(cell, ref.nextSibling);
+        else row.appendChild(cell);
+      }
+      makeTablesResizable(); liveUpdate();
+    }
+    function makeTablesResizable() {
+      editor.querySelectorAll("table.txt-table").forEach(function (t) {
+        if (t.dataset.rz) return;
+        t.dataset.rz = "1";
+        t.classList.add("resizable");
+        Array.prototype.forEach.call(t.querySelectorAll("th,td"), function (cell) {
+          if (cell.querySelector(".col-grip")) return;
+          var grip = document.createElement("span");
+          grip.className = "col-grip";
+          grip.setAttribute("contenteditable", "false");
+          grip.addEventListener("mousedown", function (e) {
+            e.preventDefault(); e.stopPropagation();
+            var startX = e.clientX, startW = cell.offsetWidth;
+            var headerRow = cell.parentNode;
+            var idx = Array.prototype.indexOf.call(headerRow.children, cell);
+            function onMove(ev) {
+              var w = Math.max(60, startW + (ev.clientX - startX));
+              var colCells = [];
+              t.querySelectorAll("tr").forEach(function (tr) {
+                if (tr.children[idx]) colCells.push(tr.children[idx]);
+              });
+              colCells.forEach(function (cc) { cc.style.width = w + "px"; });
+            }
+            function onUp() {
+              document.removeEventListener("mousemove", onMove);
+              document.removeEventListener("mouseup", onUp);
+            }
+            document.addEventListener("mousemove", onMove);
+            document.addEventListener("mouseup", onUp);
+          });
+          cell.appendChild(grip);
+        });
+      });
+    }
+
+    el("rtToolbar").addEventListener("click", function (ev) {
+      var b = ev.target.closest("button[data-rt]");
+      if (!b || editor.disabled) return;
+      var rt = b.dataset.rt;
+      focusEditor();
+      if (rt === "b") document.execCommand("bold");
+      else if (rt === "i") document.execCommand("italic");
+      else if (rt === "u") document.execCommand("underline");
+      else if (rt === "s") document.execCommand("strikeThrough");
+      else if (rt === "code") applyInlineCode();
+      else if (rt === "h2") applyBlock("h2");
+      else if (rt === "h3") applyBlock("h3");
+      else if (rt === "para") document.execCommand("insertParagraph");
+      else if (rt === "bullet") document.execCommand("insertUnorderedList");
+      else if (rt === "callout") insertBlock("callout");
+      else if (rt === "quote") insertBlock("quote");
+      else if (rt === "table") insertBlock("table");
+      else if (rt === "col") insertBlock("col");
+      else if (rt === "col3") insertBlock("col3");
+      else if (rt === "hr") insertBlock("hr");
+      else if (rt === "br") document.execCommand("insertHTML", false, "<br>");
+      else if (rt === "img") {
+        var url = prompt("Image URL or path (e.g. /images/foo.png or https://…):", "");
+        if (url) document.execCommand("insertHTML", false, '<img class="txt-img" src="' + url + '" alt=""><p><br></p>');
+      }
+      liveUpdate();
+    });
+
+    function sanitizeFile() {
+      var f = fFile.value.trim().replace(/\.txt$/i, "").replace(/[^A-Za-z0-9._-]/g, "-");
+      return f;
+    }
+    function download(filename, text) {
+      var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+    function fallbackCopy(text) {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); setStatus("Copied content to clipboard.", "ok"); }
+      catch (e) { setStatus("Copy failed — select the text manually.", "warn"); }
+      ta.remove();
+    }
+    function doCopy() {
+      var tokens = editorToTokens();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(tokens).then(function () {
+          setStatus("Copied token-syntax content to clipboard (paste into the Sheet's content column).", "ok");
+        }, function () { fallbackCopy(tokens); });
+      } else fallbackCopy(tokens);
+    }
+    function doUpdate() {
+      var file = sanitizeFile() || ("post-" + Date.now());
+      if (!fTitle.value.trim()) { setStatus("Title is required.", "warn"); fTitle.focus(); return; }
+      download(file + ".txt", editorToTokens());
+      setStatus("Downloaded " + file + ".txt. Paste/overwrite into assets/content/ if needed.", "ok");
+    }
+    function doExport() {
+      if (!fTitle.value.trim()) { setStatus("Title is required to export metadata.", "warn"); fTitle.focus(); return; }
+      var file = sanitizeFile() || ("post-" + Date.now());
+      var it = collectMeta(); it.context = file;
+      var out = [];
+      out.push("METADATA for the Google Sheet (row):");
+      out.push("id=" + (it.id || file));
+      out.push("category=" + (it.cat || "ANNOUNCEMENT").toUpperCase());
+      out.push("Title=" + it.title);
+      out.push("date=" + it.date);
+      out.push("desc=" + it.description);
+      out.push("content=" + editorToTokens());
+      out.push("");
+      out.push("(Paste the content above into the Sheet's content column.)");
+      download("metadata-" + file + ".txt", out.join("\n"));
+      setStatus("Exported metadata for " + file + ".", "ok");
+    }
+
+    el("modeSeg").addEventListener("click", function (ev) {
+      var b = ev.target.closest("button[data-mode]");
+      if (!b) return;
+      document.querySelectorAll("#modeSeg button").forEach(function (x) { x.classList.remove("active"); });
+      b.classList.add("active");
+      setMode(b.dataset.mode);
+    });
+    btns.loadLive.addEventListener("click", loadLive);
+    btns.neu.addEventListener("click", newPost);
+    btns.update.addEventListener("click", doUpdate);
+    btns.copy.addEventListener("click", doCopy);
+    btns.exp.addEventListener("click", doExport);
+    btns.clear.addEventListener("click", clearAll);
+    btns.del.addEventListener("click", doDelete);
+    el("btnAddRow").addEventListener("click", function () { if (!editor.disabled) addTableRow(); });
+    el("btnAddCol").addEventListener("click", function () { if (!editor.disabled) addTableCol(); });
+    el("search").addEventListener("input", function () {
+      if (state.list && state.list.length) buildListFromItems(state.list, state.source);
+      else buildListFromItems((C.news && C.news.items) || [], "SITE_CONFIG");
+    });
+
+    buildListFromItems((C.news && C.news.items) || [], "SITE_CONFIG");
+    enableMeta(false, false);
+    editor.disabled = true; editor.setAttribute("contenteditable", "false");
+    setMode("idle");
+  })();
+  </script>
+</body>
+</html>

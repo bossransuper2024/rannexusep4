@@ -1,0 +1,17 @@
+Patch Notes — v1.1
+
+This patch focuses on balance, rewards and security.
+
+**Highlights**
+
+- Drop-rate tuning across all dungeon tiers
+- New daily login rewards
+- Improved anti-cheat detection
+
+**Bug Fixes**
+
+- Fixed a rare crash on class selection
+- Resolved an issue where __trade windows could desync__
+- Patched the ~~dupe exploit~~ that affected a small number of accounts
+
+Thank you for reporting issues on our Discord. Keep them coming!

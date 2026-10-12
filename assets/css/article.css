@@ -1,0 +1,294 @@
+/* ============================================================================
+ * article.css — Bossran-style standalone News article skin.
+ * Light "newspaper" reading area with a dark brand banner on top, a centered
+ * title block, a square back button and centered gray meta — matching the
+ * look of bossran.online's individual news pages, but using our palette.
+ * Loaded AFTER style.css so it overrides the global dark theme on these pages.
+ * ========================================================================== */
+
+/* Override the global dark body for standalone article pages. */
+body.article-page {
+  background: #ffffff;
+  color: #191919;
+  font-family: 'Inter', 'Microsoft YaHei', 'PingFang SC', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  display: block;
+  min-height: 100vh;
+}
+
+/* Subtle 10% opacity background image (hero-bg-08) to reduce glare */
+body.article-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("../assets/hero-bg-08.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.10;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Let the article content areas be transparent to show the background image */
+body.article-page .article-tit,
+body.article-page .article-text,
+body.article-page .article-foot {
+  background: transparent;
+}
+body.article-page a { color: inherit; }
+
+/* ---- Top brand banner (Bossran .top_kv) ---------------------------------- */
+.article-top {
+  width: 100%;
+  position: relative;
+  background: linear-gradient(180deg, #0A1020 0%, #070B14 100%);
+  border-bottom: 3px solid var(--accent, #FFD60A);
+}
+.article-top .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 76px;
+}
+.article-top .a-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.article-top .a-brand img {
+  height: 44px;
+  width: auto;
+}
+.article-top .a-brand b {
+  font-family: var(--font-display, 'Rajdhani', sans-serif);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #fff;
+  text-transform: uppercase;
+}
+.article-top .a-brand small {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent, #FFD60A);
+}
+.article-top nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.article-top nav a {
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  padding: 4px 0;
+}
+.article-top nav a:hover,
+.article-top nav a.is-active { color: var(--accent, #FFD60A); }
+.article-top nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 2px;
+  background: var(--accent, #FFD60A);
+}
+
+/* ---- Title block (Bossran .tit / .tbox / .artTitle / .artInfo) ----------- */
+.article-tit {
+  width: 100%;
+  border-bottom: 1px solid #ededed;
+  background: transparent; /* noise pattern shows through */
+}
+.article-tbox {
+  width: min(100% - 44px, 1040px);
+  margin: 0 auto;
+  padding: 30px 0 26px;
+  position: relative;
+}
+.article-title {
+  margin: 0 auto;
+  padding: 0 64px;
+  position: relative;
+  line-height: 1.25;
+  color: #191919;
+  font-size: clamp(24px, 4vw, 34px);
+  text-align: center;
+  font-weight: 700;
+  font-family: var(--font-display, 'Rajdhani', 'Microsoft YaHei', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+/* Square back button, top-left (Bossran .back) */
+.article-back {
+  width: 46px;
+  height: 46px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+.article-back::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-left: 2px solid #555;
+  border-bottom: 2px solid #555;
+  transform: rotate(45deg);
+  margin-left: 4px;
+  transition: border-color 0.25s ease;
+}
+.article-back:hover { border-color: var(--accent, #FFD60A); }
+.article-back:hover::before { border-color: var(--accent, #FFD60A); }
+
+.article-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  color: #666;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+}
+
+/* ---- Reading column (Bossran .artText) ----------------------------------- */
+.article-text {
+  width: min(100% - 44px, 880px);
+  margin: 34px auto 0;
+  padding-bottom: 110px;
+  color: #191919;
+  font-size: 16px;
+  line-height: 1.75;
+}
+.article-text > *:first-child { margin-top: 0; }
+.article-text p { margin: 0 0 16px; }
+.article-text strong { color: #000; font-weight: 700; }
+.article-text u { text-decoration: underline; text-underline-offset: 2px; }
+.article-text del { color: #999; }
+.article-text em { font-style: italic; }
+
+.article-text ul.a-list {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+}
+.article-text ul.a-list > li {
+  position: relative;
+  padding-left: 22px;
+  margin: 0 0 8px;
+}
+.article-text ul.a-list > li::before {
+  content: "";
+  position: absolute;
+  left: 4px; top: 9px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #FFD60A);
+}
+.article-text ol { margin: 0 0 18px; padding-left: 24px; }
+.article-text ol li { margin: 0 0 8px; }
+
+.article-text img.a-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 18px auto;
+  border-radius: 6px;
+  border: 1px solid #e7e7e7;
+}
+.article-text figure.a-figure {
+  margin: 0 0 24px;
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fafafa;
+}
+.article-text figure.a-figure img { margin: 0; border: 0; border-radius: 0; width: 100%; }
+
+.article-text table.a-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 0.95em;
+}
+.article-text table.a-table th,
+.article-text table.a-table td {
+  padding: 9px 13px;
+  border: 1px solid #e2e2e2;
+  text-align: left;
+}
+.article-text table.a-table th {
+  background: #f5f5f5;
+  font-weight: 700;
+  color: #191919;
+}
+
+.article-text .a-callout {
+  background: rgba(255, 214, 10, 0.10);
+  border: 1px solid rgba(255, 214, 10, 0.4);
+  border-left: 4px solid var(--accent, #FFD60A);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 18px 0;
+}
+.article-text blockquote.a-quote {
+  border-left: 3px solid var(--accent, #FFD60A);
+  padding: 12px 18px;
+  margin: 18px 0;
+  color: #555;
+  font-style: italic;
+  background: rgba(255, 214, 10, 0.05);
+  border-radius: 0 8px 8px 0;
+}
+.article-text code.a-code {
+  background: #f0f0f0;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9em;
+  color: #b8860b;
+  border: 1px solid #e2e2e2;
+}
+.article-text .a-col { display: flex; flex-wrap: wrap; gap: 22px; margin: 18px 0; }
+.article-text .a-col > * { flex: 1 1 45%; min-width: 260px; }
+.article-text hr.a-hr {
+  border: none;
+  border-top: 1px solid #e6e6e6;
+  margin: 26px 0;
+}
+
+/* ---- Mobile -------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .article-top .wrap { height: auto; padding: 12px 0; flex-wrap: wrap; }
+  .article-top nav { gap: 14px; }
+  .article-title { padding: 0; font-size: 22px; margin-top: 8px; }
+  /* Button now lives inside the <h1> — make it a centered block above the title. */
+  .article-back { position: static; transform: none; display: flex; margin: 0 auto 12px; }
+  .article-info .a-sep { display: block; height: 0; margin: 4px 0; }
+  .article-text { font-size: 15px; }
+}
+
+.article-info > span { display: inline-block; vertical-align: middle; }
+.article-info .a-tag {
+  color: #191919;
+  background: var(--accent, #FFD60A);
+  padding: 2px 10px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+.article-info .a-sep {
+  margin: 0 14px;
+  color: #ccc;
+}

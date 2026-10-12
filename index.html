@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Ran Online EP4 — EP4 calls. Answer it.</title>
+  <meta name="description" content="Ran Online EP4 — a premium RAN Online private server. 4 classes, competitive PvP, raids, and a living roadmap. EP4 calls. Answer it.">
+
+  <!-- Open Graph / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ran Online EP4 — EP4 calls. Answer it.">
+  <meta property="og:description" content="Ran Online EP4 — a premium RAN Online private server. 4 classes, competitive PvP, raids, and a living roadmap. EP4 calls. Answer it.">
+  <meta property="og:image" content="https://EP4ranonline.com/assets/logo.png">
+  <meta property="og:url" content="https://EP4ranonline.com/">
+  <meta property="og:site_name" content="Ran Online EP4">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ran Online EP4 — EP4 calls. Answer it.">
+  <meta name="twitter:description" content="Ran Online EP4 — a premium RAN Online private server. 4 classes, competitive PvP, raids, and a living roadmap. EP4 calls. Answer it.">
+  <meta name="twitter:image" content="https://EP4ranonline.com/assets/logo.png">
+
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="brand" href="#home">
+        <img src="assets/logo.png" alt="Ran Online EP4">
+        <span><b>RAN ONLINE EP4</b><small>EP4 · CLASSIC</small></span>
+      </a>
+      <nav class="nav-links" id="nav-menu">
+        <a href="#home">Home</a>
+        <a href="#server">Server</a>
+        <a href="news.html">News</a>
+        <a href="#classes">Classes</a>
+        <a href="#combat">Combat</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#download">Download</a>
+        <a href="#community">Community</a>
+        <a href="#services">Services</a>
+      </nav>
+      <a class="btn nav-cta" id="nav-cta" href="#download">PLAY FREE</a>
+      <button class="nav-burger" id="nav-burger" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="bg-fx" id="hero-bg" style="background-image:url('assets/hero-bg-01.png')"></div>
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="hero-tag">◆ NOW IN CLOSED BETA — EP4</span>
+          <h1 id="hero-title">RAN ONLINE</h1>
+          <div class="subtitle" id="hero-subtitle">RAN ONLINE EP4</div>
+          <p class="lead" id="hero-lead"></p>
+          <div class="hero-actions">
+            <button class="btn" id="hero-trailer">WATCH TRAILER</button>
+            <a class="btn btn--ghost" id="hero-download" href="#download">DOWNLOAD NOW</a>
+          </div>
+        </div>
+        <div class="hero-stats" id="hero-stats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>7 CLASSES</span><span>100v100 TYRANNY WARS</span><span>FREE TO PLAY</span><span>EP4 CLIENT</span><span>CUSTOM EVENTS</span><span>DAILY REWARDS</span>
+      <span>7 CLASSES</span><span>100v100 TYRANNY WARS</span><span>FREE TO PLAY</span><span>EP4 CLIENT</span><span>CUSTOM EVENTS</span><span>DAILY REWARDS</span>
+    </div>
+  </div>
+
+  <!-- SERVER -->
+  <section class="section" id="server">
+    <div class="bg-fx" id="server-bg" style="background-image:url('assets/hero-bg-02.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">SERVER INFO</span>
+      <h2 class="section-title">THE <span class="accent">BATTLEFIELD.</span></h2>
+      <p class="section-intro" id="server-intro"></p>
+      <div class="stat-grid" id="server-stats"></div>
+      <div class="rate-row" id="server-rates"></div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="section" id="news">
+    <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">NEWS</span>
+      <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+      <p class="section-intro" id="news-intro"></p>
+            <!-- Category filter tabs (ALL | NEWS | ANNOUNCEMENT | GUIDE) -->
+      <div class="news-tabs news-filter" id="news-tabs"></div>
+      <!-- Bossran-style compact list (news-row). Rows deep-link to the standalone
+           reader via news.html#id=<CSV_ID>. -->
+      <div class="news-grid" id="news-grid">
+        <div class="news-tbody" id="news-tbody"></div>
+      </div>
+      <!-- "View all content" footer (Main Page preview only; populated by main.js). -->
+      <div class="news-view-all" id="news-view-all"></div>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="section section--tight" id="classes">
+    <div class="bg-fx" id="classes-bg" style="background-image:url('assets/hero-bg-03.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">CLASSES</span>
+      <h2 class="section-title">CHOOSE YOUR <span class="accent">LEGEND.</span></h2>
+      <p class="section-intro">Seven distinct classes, each with its own skill tree, role and PvP identity. Pick the one that fits your fight.</p>
+      <div class="class-tabs" id="class-tabs"></div>
+      <div class="class-panel" id="class-panel"></div>
+    </div>
+  </section>
+
+
+  <!-- COMBAT -->
+  <section class="section" id="combat">
+    <div class="bg-fx" id="combat-bg" style="background-image:url('assets/hero-bg-04.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">COMBAT</span>
+      <h2 class="section-title">WAR IS <span class="accent">EPIC.</span></h2>
+      <p class="section-intro" id="combat-intro"></p>
+      <div class="kicker-row" style="margin-top:30px">
+        <h3 style="font-family:var(--font-display);font-weight:700;font-size:24px;text-transform:uppercase;margin:0">LIVE EVENTS</h3>
+      </div>
+      <div class="mode-card reveal" id="combat-live" style="border-color:rgba(var(--accent-rgb),0.4);margin-top:14px">
+        <span class="live">LIVE</span>
+        <h3 class="ev-title"></h3>
+        <div class="sched ev-desc"></div>
+        <div class="sched ev-sched" style="margin-top:8px"></div>
+      </div>
+      <!-- WAR ALARM -->
+      <div id="combat-alarm" class="war-alarm reveal">
+        <div class="war-alarm-head">
+          <span class="war-alarm-icon">⏰</span>
+          <div class="war-alarm-label">
+            <strong>WAR ALARM</strong>
+            <span>Get notified when war is about to start</span>
+          </div>
+          <div id="alarm-status" class="alarm-status"></div>
+        </div>
+        <!-- NEXT WAR DISPLAY -->
+        <div id="next-war-bar" class="next-war-bar">
+          <div class="next-war-left">
+            <span class="next-war-tag"><span class="next-war-pulse"></span>NEXT WAR</span>
+            <span id="next-war-name" class="next-war-name">--</span>
+          </div>
+          <div class="next-war-right">
+            <span id="next-war-sched" class="next-war-sched">--</span>
+            <span id="next-war-timer" class="next-war-timer">--:--:--</span>
+          </div>
+        </div>
+        <div id="alarm-times" class="alarm-times"></div>
+        <div id="alarm-toast" class="alarm-toast" aria-live="assertive"></div>
+      </div>
+      <h3 style="font-family:var(--font-display);font-weight:700;font-size:24px;text-transform:uppercase;margin:34px 0 0">PvP MODES</h3>
+      <div class="mode-grid" id="combat-modes"></div>
+      <h3 style="font-family:var(--font-display);font-weight:700;font-size:24px;text-transform:uppercase;margin:34px 0 0">PvE RAIDS</h3>
+      <div class="raid-list" id="combat-raids"></div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section section--tight" id="roadmap">
+    <div class="bg-fx" id="roadmap-bg" style="background-image:url('assets/hero-bg-05.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">ROADMAP</span>
+      <h2 class="section-title">THE ROAD TO <span class="accent">LAUNCH.</span></h2>
+      <p class="section-intro" id="roadmap-intro"></p>
+      <div class="roadmap">
+        <button class="road-nav road-prev" id="road-prev" aria-label="Previous Phase">&lsaquo;</button>
+        <div class="road-viewport" id="road-viewport">
+          <div class="road-track" id="roadmap-grid">
+            <div class="road-line"><i id="road-line-fill"></i></div>
+          </div>
+        </div>
+        <button class="road-nav road-next" id="road-next" aria-label="Next Phase">&rsaquo;</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- DOWNLOAD -->
+  <section class="section section--tight" id="download">
+    <div class="bg-fx" id="download-bg" style="background-image:url('assets/hero-bg-06.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">DOWNLOAD</span>
+      <h2 class="section-title"><span id="download-title">GET IN THE</span> <span class="accent" id="download-accent">FIGHT.</span></h2>
+      <p class="section-intro" id="download-intro"></p>
+      <div class="dl-grid" id="download-grid"></div>
+      <div class="dl-notes" id="download-notes"></div>
+    </div>
+  </section>
+
+
+  <!-- COMMUNITY -->
+  <section class="section" id="community">
+    <div class="bg-fx" id="community-bg" style="background-image:url('assets/hero-bg-09.png')"></div>
+    <div class="wrap">
+      <div class="community">
+        <div>
+          <span class="eyebrow">COMMUNITY</span>
+          <h2 class="section-title"><span id="community-title">JOIN THE</span> <span class="accent" id="community-accent">LEGEND.</span></h2>
+          <p class="section-intro" id="community-desc"></p>
+          <div class="community-actions" id="community-actions"></div>
+          <div class="community-stats" id="community-stats"></div>
+        </div>
+        <div class="community-art">
+          <div class="community-discord" id="community-discord">
+            <iframe src="https://discord.com/widget?id=1539653131028402276&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" title="Discord"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section--tight" id="services">
+    <div class="bg-fx" id="services-bg" style="background-image:url('assets/hero-bg-07.png')"></div>
+    <div class="wrap">
+      <span class="eyebrow">SERVICES</span>
+      <h2 class="section-title"><span id="services-title">OUR</span> <span class="accent" id="services-accent">SERVICES.</span></h2>
+      <p class="section-intro" id="services-intro"></p>
+      <div class="svc-tabs" id="svc-tabs"></div>
+      <div class="svc-grid" id="svc-grid"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="bg-fx" id="footer-bg" style="background-image:url('assets/hero-bg-10.png')"></div>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#home">
+            <img src="assets/logo.png" alt="Ran Online EP4">
+            <span><b>RAN ONLINE EP4</b><small>EP4 · EP4 CALLS</small></span>
+          </a>
+          <p id="footer-tagline"></p>
+        </div>
+        <div id="footer-cols"></div>
+      </div>
+      <div class="footer-bottom">
+        <span id="footer-copyright"></span>
+        <span>RAN ONLINE EP4 · NOT AFFILIATED WITH GRAVITY</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MUSIC -->
+  <div class="music-control" id="music-control">
+    <button class="music-toggle" id="music-toggle" aria-label="Toggle music">
+      <span class="music-icon">♪</span>
+      <span class="music-copy"><span>OST</span><strong>RAN EP4</strong></span>
+      <span class="music-bars"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+  <audio id="bgm" loop preload="none"></audio>
+
+  <!-- SCRIPTS -->
+  <!-- Main Page News rows deep-link to the standalone news.html page (no popup). -->
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/downloads.js"></script>
+  <script src="assets/js/news-data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
+

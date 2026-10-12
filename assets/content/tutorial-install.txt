@@ -1,0 +1,22 @@
+How to Install the EP9 Client
+
+Follow these steps to get into the game.
+
+**Step 1 — Download**
+
+- Get the full client from the Download section
+- Choose the mirror closest to your region
+
+**Step 2 — Extract**
+
+- Unzip the archive to a folder you can find easily
+- __Do not__ place it inside Program Files (Windows can block writes)
+
+**Step 3 — Launch**
+
+- Run the launcher as administrator
+- Let it patch to the latest version
+
+~~If you see a virus warning, ignore it.~~ Modern launchers are signed — if your antivirus flags it, add an exception.
+
+You're ready to play. See you in-game!

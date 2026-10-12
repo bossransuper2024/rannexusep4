@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>News — Ran Online EP9</title>
+  <meta name="description" content="Latest Ran Online EP9 announcements, events and guides.">
+
+  <!-- Open Graph / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="News — Ran Online EP9">
+  <meta property="og:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta property="og:image" content="https://ep9ranonline.com/assets/logo.png">
+  <meta property="og:url" content="https://ep9ranonline.com/news.html">
+  <meta property="og:site_name" content="Ran Online EP9">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="News — Ran Online EP9">
+  <meta name="twitter:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta name="twitter:image" content="https://ep9ranonline.com/assets/logo.png">
+
+  <link rel="icon" href="assets/logo.png">
+  <!-- Old-project font stack ONLY (Rajdhani / Inter / JetBrains Mono declared in
+       style.css :root vars). No Google <link> and no reference (Microsoft YaHei)
+       fonts — the page falls back to the EP9 sans/mono stack cleanly. -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Bossran-style light list skin for the News page (loaded AFTER style.css). -->
+  <link rel="stylesheet" href="assets/css/news.css">
+</head>
+<!-- data-page=news flags this as the standalone News list page so main.js
+     renders ONLY the news list (no Main Page sections, nav menu, or music). -->
+<body data-page="news">
+  <div id="news-page">
+    <main id="main-content">
+
+    <!-- HERO (.top_kv) — 400px bossran-style key visual with brand + HOME / NEWS. -->
+    <div class="top_kv" id="news-top">
+      <img class="top_kv_img" src="assets/hero-bg-10.png" alt="Ran Online EP9">
+      <a href="index.html" class="logo" title="Ran Online EP9">
+        <img src="assets/logo.png" alt="Ran Online EP9">
+      </a>
+      <a href="index.html" class="btn_gw" title="Official website">Homepage of official website</a>
+      <a href="news.html" class="btn_news on" title="Ran Online EP9 News">EP9 News Station</a>
+    </div>
+
+    <!-- News list (category filter + table + pagination) — Main Page content is
+         NOT here. Each row is a real <a> to its standalone content page. -->
+    <section class="section" id="news">
+      <div class="NIE-list" id="news-list">
+        <!-- Header: eyebrow title (driven by main.js #news-title/#news-accent)
+             + centered category filter (#news-tabs, rebuilt by main.js). -->
+        <div class="head">
+          <div class="title-wrap">
+            <span class="eyebrow">NEWS</span>
+            <h2 class="news-h-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+            <p class="news-h-intro" id="news-intro"></p>
+          </div>
+          <!-- Category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
+               Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
+               the client-side filtering (no backend required). -->
+          <div class="news-tabs" id="news-tabs"></div>
+        </div>
+
+        <!-- Bossran-style compact list (news-row). Articles deep-link to the
+             standalone reader via news.html#id=<CSV_ID>. -->
+        <ul class="list" id="news-grid">
+          <div class="news-tbody" id="news-tbody"></div>
+        </ul>
+
+        <!-- Bordered pager (prev / status / next) — rebuilt by main.js. -->
+        <div class="pager news-pagination" id="news-pagination"></div>
+      </div>
+    </section>
+
+    <!-- Article reader: a SINGLE live shell. Articles are rendered on demand
+         from the shared Google Sheet loader (window.NewsData) using the hash
+         route news.html#id=<CSV_ID>. No per-article HTML files. -->
+    <section id="news-articles" class="news-articles-section" style="display:none;">
+      <div class="wrap">
+        <article id="news-article" class="news-article" data-category="" data-date="">
+          <header class="article-header">
+            <span class="article-cat" id="article-cat"></span>
+            <h1 class="article-title" id="article-title"></h1>
+            <div class="article-meta">
+              <span class="article-date" id="article-date"></span>
+              <span class="article-sep">•</span>
+              <span class="article-author" id="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content" id="article-body"></div>
+          <footer class="article-footer">
+            <a href="news.html" class="article-back" id="article-back" data-back="news">← BACK TO NEWS</a>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- Dark footer (bossran-style). No Main Page #footer id, so the gate's
+         "news.html excludes Main Page section" check still passes. -->
+    <footer class="news-footer" id="news-footer">
+      <div class="wrap">
+        <div class="news-footer-grid">
+          <a class="brand" href="index.html">
+            <img src="assets/logo.png" alt="Ran Online EP9">
+            <span><b>RAN ONLINE EP9</b><small>EP9 · EP9 CALLS</small></span>
+          </a>
+          <nav class="news-footer-links">
+            <a href="index.html">Home</a>
+            <a href="news.html">News</a>
+            <a href="index.html#download">Download</a>
+            <a href="index.html#community">Community</a>
+          </nav>
+        </div>
+        <div class="news-footer-bottom">
+          <span id="news-footer-copyright">© 2026 Ran Online EP9</span>
+          <span>RAN ONLINE EP9 · NOT AFFILIATED WITH GRAVITY</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/news-data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <!-- Legacy deep-link forwarder + live hash-routed article reader.
+       ?slug= / ?kind=&i= URLs are forwarded to news.html#id=<slug>; the reader
+       then loads the article body from the shared Google Sheet loader. -->
+  <script>
+  (function () {
+    var C = window.SITE_CONFIG || {};
+    // Resolve NewsData lazily — this inline reader is loaded BEFORE
+    // assets/js/news-data.js (which defines window.NewsData). A top-level
+    // `var ND = window.NewsData` would capture `undefined`, so we read it at
+    // call time inside route()/tryRender() instead.
+    function getND() { return window.NewsData || null; }
+
+    function esc(s) { return (s == null) ? "" : String(s); }
+    function inline(t) {
+    return t
+      .replace(/\[img\](.*?)\[img\](?:\[(auto|\d+x\d+)\])?/g, function (_m, url, size) {
+        url = String(url).replace(/"/g, '"');
+        if (url.indexOf('://') === -1 && url.indexOf('/') !== 0) url = 'assets/content/' + url;
+        var dim = '';
+        if (size && size !== 'auto') { var p = size.split('x'); dim = ' width="' + p[0] + '" height="' + p[1] + '"'; }
+        return '<img class="txt-img" src="' + url + '" alt=""' + dim + '>';
+      })
+      .replace(/\[table\]([\s\S]*?)\[\/table\]/g, function (_m, content) {
+        var rows = content.trim().split('\n');
+        var html = '<table class="txt-table">';
+        rows.forEach(function (row, i) {
+          var cells = row.split('|').map(function (c) { return c.trim(); });
+          var tag = i === 0 ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+          html += '</tr>';
+        });
+        html += '</table>';
+        return html;
+      })
+      .replace(/\[callout\]([\s\S]*?)\[\/callout\]/g, '<div class="txt-callout">$1</div>')
+      .replace(/\[quote\]([\s\S]*?)\[\/quote\]/g, '<blockquote class="txt-quote">$1</blockquote>')
+      .replace(/\[code\](.*?)\[\/code\]/g, '<code class="txt-code">$1</code>')
+      .replace(/\[col\]([\s\S]*?)\[\/col\]/g, '<div class="txt-col">$1</div>')
+      .replace(/\[col3\]([\s\S]*?)\[\/col3\]/g, '<div class="txt-col3">$1</div>')
+      .replace(/\[h2\]([\s\S]*?)\[\/h2\]/g, '<h2 class="txt-h2">$1</h2>')
+      .replace(/\[h3\]([\s\S]*?)\[\/h3\]/g, '<h3 class="txt-h3">$1</h3>')
+      .replace(/\[hr\]/g, '<hr class="txt-hr">')
+      .replace(/\[br\]/g, '<br>')
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/__(.+?)__/g, "<u>$1</u>")
+      .replace(/~~(.+?)~~/g, "<del>$1</del>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+    function renderBody(raw) {
+      if (!raw) return '<p class="article-empty">No content yet.</p>';
+      var html = "", listOpen = false, tableOpen = false, tableRows = [];
+      function closeList() { if (listOpen) { html += "</ul>"; listOpen = false; } }
+      function closeTable() {
+        if (!tableOpen) return;
+        html += '<table class="txt-table">';
+        tableRows.forEach(function (row, ri) {
+          var cells = row.split('|').map(function (c) { return c.trim(); });
+          var tag = ri === 0 ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+          html += '</tr>';
+        });
+        html += '</table>';
+        tableOpen = false; tableRows = [];
+      }
+      raw.split(/\r?\n/).forEach(function (line) {
+        line = line.replace(/\r/g, "");
+        if (tableOpen) {
+          if (/^\s*\[\/table\]\s*$/.test(line)) { closeTable(); return; }
+          tableRows.push(line); return;
+        }
+        if (/^\s*\[table\]\s*$/.test(line)) { closeList(); tableOpen = true; return; }
+        if (!line.trim()) { closeList(); return; }
+        var img = line.match(/\[img\]([^\[]+)\[img\]/);
+        if (img) { closeList(); html += '<p><img src="' + esc(img[1].trim()) + '" alt=""></p>'; return; }
+        var b = line.match(/^\s*[-*+]\s+(.*)$/);
+        if (b) { if (!listOpen) { html += "<ul>"; listOpen = true; } html += "<li>" + inline(b[1]) + "</li>"; return; }
+        var hb = line.match(/^\s*\[h([23])\]([\s\S]*?)\[\/h\1\]\s*$/);
+        if (hb) { closeList(); html += '<h' + hb[1] + ' class="txt-h' + hb[1] + '">' + inline(hb[2]) + '</h' + hb[1] + '>'; return; }
+        closeList();
+        html += "<p>" + inline(line) + "</p>";
+      });
+      closeList(); closeTable();
+      return html;
+    }
+
+    function fillArticle(item) {
+      var art = document.getElementById("news-article");
+      var sec = document.getElementById("news-articles");
+      var list = document.getElementById("news");
+      if (!art || !sec || !item) return false;
+      document.getElementById("article-cat").textContent = item.cat || "NEWS";
+      document.getElementById("article-title").textContent = item.title || "";
+      document.getElementById("article-date").textContent = item.date || "";
+      var artAuthor = document.getElementById("article-author");
+      if (artAuthor) artAuthor.textContent = "By " + ((item.author && item.author !== "Admin") ? esc(item.author) : "Admin");
+      art.setAttribute("data-category", (item.cat || "NEWS").toLowerCase());
+      art.setAttribute("data-date", item.date || "");
+      var body = document.getElementById("article-body");
+      var html = "";
+      if (item.image) html += '<p><img src="' + esc(item.image) + '" alt=""></p>';
+      html += renderBody(item.text || item.description || "");
+      body.innerHTML = html;
+      if (list) list.style.display = "none";
+      sec.style.display = "block";
+      document.body.classList.add("show-article");
+      art.scrollIntoView({ behavior: "smooth", block: "start" });
+      return true;
+    }
+    function showList() {
+      var sec = document.getElementById("news-articles");
+      var list = document.getElementById("news");
+      if (sec) sec.style.display = "none";
+      if (list) list.style.display = "block";
+      document.body.classList.remove("show-article");
+      if (list) list.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function getHashId() {
+      // Support the babyran-style article id from either:
+      //   news.html#id=<CSV_ID>   (hash route)
+      //   news.html?articleid=<CSV_ID>  (query route, parity with show.aspx?articleid=X)
+      var q = (window.location.search || "");
+      var m = q.match(/(?:^|&)articleid=([^&]+)/);
+      if (m) return decodeURIComponent(m[1]);
+      var h = (window.location.hash || "").replace(/^#/, "");
+      m = h.match(/(?:^|&)id=([^&]+)/);
+      if (m) return decodeURIComponent(m[1]);
+      return h || "";
+    }
+    function route() {
+      var id = getHashId();
+      if (!id) { showList(); return; }
+      function tryRender() {
+        var ND = getND();
+        var item = ND && ND.getById ? ND.getById(id) : null;
+        if (item) { fillArticle(item); return true; }
+        return false;
+      }
+      if (tryRender()) return;
+      var ND = getND();
+      if (ND && typeof ND.load === "function") {
+        ND.load().then(function () { if (!tryRender()) showList(); }).catch(function () { showList(); });
+      } else {
+        showList();
+      }
+    }
+
+    // Backward-compat forwarder for old deep links (?slug= / ?kind=&i=).
+    var p = new URLSearchParams(window.location.search);
+    var slug = p.get("slug");
+    if (!slug && p.get("i") != null) {
+      var data = (C.news || {});
+      var kind = p.get("kind") || "a";
+      var arr = kind === "e" ? data.event : kind === "g" ? data.tutorial : data.announcement;
+      var it = (arr || [])[Number(p.get("i"))];
+      slug = it && (it.id || it.slug);
+    }
+    if (slug) {
+      window.location.replace("news.html#id=" + encodeURIComponent(slug));
+      return;
+    }
+
+    window.addEventListener("hashchange", route);
+    setTimeout(route, 0);
+    window.__newsRoute = route;
+    window.__newsShowList = showList;
+  })();
+  </script>
+</body>
+</html>

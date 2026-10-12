@@ -1,0 +1,22 @@
+Beginner Class Guide
+
+Not sure where to start? Here's a quick breakdown of the seven classes.
+
+**Melee**
+
+- Sword Warrior — high burst, close range
+- Blade Specialist — fast, mobile duelist
+
+**Ranged**
+
+- Archer — sustained damage from afar
+- Mage — area control and crowd control
+
+**Support**
+
+- Priest — healing and buffs
+- Bard — utility and team scaling
+
+__Pick what fits your playstyle, not just the meta.__
+
+Experiment in the training grounds before committing your build.

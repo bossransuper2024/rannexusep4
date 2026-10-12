@@ -1,0 +1,14 @@
+Safe Trading with a Middleman
+
+Always use a __verified middleman__ for big trades. It only takes a minute and prevents scams.
+
+**The process**
+
+- Both players agree on a verified middleman
+- The seller hands the item to the middleman
+- The buyer sends payment to the middleman
+- The middleman releases item and payment at the same time
+
+~~Never trade directly with someone you don't trust.~~ Even friends can be compromised — use a middleman for high-value deals.
+
+Open a ticket in our Discord to request a middleman.
