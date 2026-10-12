@@ -207,9 +207,9 @@
   /* -------- HERO -------- */
   function renderHero() {
     var h = C.hero || {};
-    if (el("hero-title")) el("hero-title").textContent = h.Title || "RAN ONLINE";
-    if (el("hero-subtitle")) el("hero-subtitle").textContent = h.Subtitle || "";
-    if (el("hero-lead")) el("hero-lead").textContent = h.Description || "";
+    if (el("hero-title")) el("hero-title").textContent = h.title || h.Title || "RAN ONLINE";
+    if (el("hero-subtitle")) el("hero-subtitle").textContent = h.subtitle || h.Subtitle || "";
+    if (el("hero-lead")) el("hero-lead").textContent = h.description || h.Description || "";
     if (h.bg && el("hero-bg")) el("hero-bg").style.backgroundImage = "url('" + h.bg + "')";
     var trailer = el("hero-trailer");
     if (trailer) {

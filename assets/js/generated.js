@@ -2,10 +2,10 @@
 (function () {
   window.SITE_CONFIG = Object.assign({}, window.SITE_CONFIG, {
   "site": {
-    "title": "RanOnline EP4",
+    "title": "Ran Nexus Online EP4",
     "tagline": "Choose your school. Enter the battle.",
     "brandShort": "RAN online",
-    "brandLong": "RanOnline EP4",
+    "brandLong": "Ran Nexus Online EP4",
     "logo": "assets/logo.png",
     "favicon": "assets/logo.png",
     "version": "EP4",
@@ -14,9 +14,9 @@
   "nav": "Home,Server,News,Classes,Combat,Roadmap,Download,Community,Services",
   "navTransparentOnScroll": true,
   "hero": {
-    "title": "RAN ONLINE",
+    "title": "Ran Nexus Online EP4",
     "subtitle": "RanOnline EP4",
-    "description": "Experience Ran Online EP4 with classic school warfare, intense PvP battles, and a progression built for long-term gameplay.",
+    "description": "Experience RRan Nexus Online EP4 with classic school warfare, intense PvP battles, and a progression built for long-term gameplay, powered by CoreEye Vanguard.",
     "bg": "assets/hero-bg-01.png",
     "ctaPlay": "WATCH TRAILER",
     "ctaPlayUrl": "https://www.youtube.com/",
@@ -47,7 +47,7 @@
   "music": {
     "enabled": true,
     "src": "assets/audio/ranmixed-clean.mp3",
-    "title": "RanOnline EP4",
+    "title": "Ran Nexus Online EP4",
     "autoplay": false,
     "bounce": true,
     "aggressive": false,
@@ -559,7 +559,7 @@
         "Mod coverage"
       ]
     ],
-    "facebookPage": "ranOnline EP4"
+    "facebookPage": "Ran Nexus Online EP4"
   },
   "services": {
     "bg": "assets/hero-bg-07.png",
@@ -720,7 +720,7 @@
         ]
       }
     ],
-    "copyright": "2026 RAN EP4. All Rights Reserved."
+    "copyright": "2026 Ran Nexus Online EP4. All Rights Reserved."
   }
 });
 })();
